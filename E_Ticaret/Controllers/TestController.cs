@@ -43,5 +43,33 @@ namespace E_Ticaret.Controllers
                 return View();
             }
         }
+
+        public IActionResult Banners()
+        {
+            try
+            {
+                using var connection = _context.CreateConnection();
+                connection.Open();
+                
+                // Tüm banner'ları getir
+                var banners = connection.Query<dynamic>(@"
+                    SELECT Id, Title, Subtitle, ButtonText, ButtonUrl, ImageUrl, 
+                           MobileImageUrl, DisplayOrder, IsActive, StartDate, EndDate, 
+                           CreatedAt, UpdatedAt
+                    FROM Banners 
+                    ORDER BY DisplayOrder");
+                
+                ViewBag.Banners = banners;
+                ViewBag.BannerCount = banners.Count();
+                
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Banner query failed");
+                ViewBag.ErrorMessage = ex.Message;
+                return View();
+            }
+        }
     }
 }

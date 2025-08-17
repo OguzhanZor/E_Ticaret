@@ -1,133 +1,269 @@
-@model E_Ticaret.Controllers.B2BViewModel
+@using E_Ticaret.Models.ViewModels
+@model HomeViewModel
 @{
-    ViewData["Title"] = "B2B Dashboard";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "B2B Ana Sayfa";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <h2 class="mb-4">
-                <i class="material-icons md-business"></i> B2B Dashboard
-            </h2>
-        </div>
-    </div>
-
-    <div class="row">
-        <!-- Ürünler -->
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Toplam Ürün
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Products.Count()</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="material-icons md-inventory text-primary" style="font-size: 2rem;"></i>
-                        </div>
+<!-- Hero Slider -->
+<section class="home-slider position-relative mb-30">
+    <div class="container">
+        <div class="home-slide-cover mt-30">
+            <div class="hero-slider-1 style-4 dot-style-1 dot-style-1-position-1">
+                <div class="single-hero-slider single-animation-wrap" style="background-image: url(/assets/imgs/slider/slider-1.png)">
+                    <div class="slider-content">
+                        <h1 class="display-2 mb-40">
+                            Don't miss amazing<br />
+                            grocery deals
+                        </h1>
+                        <p class="mb-65">Sign up for the daily newsletter</p>
+                        <form class="form-subcriber d-flex">
+                            <input type="email" placeholder="Your email address" />
+                            <button class="btn" type="submit">Subscribe</button>
+                        </form>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a href="@Url.Action("Products", "B2B")" class="btn btn-primary btn-sm">
-                        <i class="material-icons md-visibility"></i> Görüntüle
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Kategoriler -->
-        <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Toplam Kategori
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Categories.Count()</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="material-icons md-category text-success" style="font-size: 2rem;"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <a href="@Url.Action("Categories", "B2B")" class="btn btn-success btn-sm">
-                        <i class="material-icons md-visibility"></i> Görüntüle
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        <i class="material-icons md-speed"></i> Hızlı İşlemler
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <a href="@Url.Action("Products", "B2B")" class="btn btn-primary btn-lg btn-block">
-                                <i class="material-icons md-inventory"></i><br />
-                                Ürünler
-                            </a>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="@Url.Action("Categories", "B2B")" class="btn btn-success btn-lg btn-block">
-                                <i class="material-icons md-category"></i><br />
-                                Kategoriler
-                            </a>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="@Url.Action("Orders", "B2B")" class="btn btn-info btn-lg btn-block">
-                                <i class="material-icons md-shopping_cart"></i><br />
-                                Siparişler
-                            </a>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <a href="@Url.Action("Reports", "B2B")" class="btn btn-warning btn-lg btn-block">
-                                <i class="material-icons md-assessment"></i><br />
-                                Raporlar
-                            </a>
-                        </div>
+                <div class="single-hero-slider single-animation-wrap" style="background-image: url(/assets/imgs/slider/slider-2.png)">
+                    <div class="slider-content">
+                        <h1 class="display-2 mb-40">
+                            Fresh Vegetables<br />
+                            Big discount
+                        </h1>
+                        <p class="mb-65">Save up to 50% off on your first order</p>
+                        <form class="form-subcriber d-flex">
+                            <input type="email" placeholder="Your email address" />
+                            <button class="btn" type="submit">Subscribe</button>
+                        </form>
                     </div>
                 </div>
             </div>
+            <div class="slider-arrow hero-slider-1-arrow"></div>
         </div>
     </div>
+</section>
 
-    @if (TempData["Error"] != null)
-    {
+<!-- Featured Categories -->
+<section class="popular-categories section-padding">
+    <div class="container wow animate__animated animate__fadeIn">
+        <div class="section-title">
+            <div class="title">
+                <h3>Featured Categories</h3>
+                <ul class="list-inline nav nav-tabs links">
+                    @foreach (var category in Model.Categories.Take(4))
+                    {
+                        <li class="list-inline-item nav-item">
+                            <a class="nav-link @(category == Model.Categories.First() ? "active" : "")" href="#">@category.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="slider-arrow slider-arrow-2 flex-right carausel-10-columns-arrow" id="carausel-10-columns-arrows"></div>
+        </div>
+        <div class="carausel-10-columns-cover position-relative">
+            <div class="carausel-10-columns" id="carausel-10-columns">
+                @foreach (var category in Model.Categories.Take(10))
+                {
+                    <div class="card-2 bg-@(new Random().Next(9, 16)) wow animate__animated animate__fadeInUp" data-wow-delay="@(new Random().Next(1, 10) * 0.1)s">
+                        <figure class="img-hover-scale overflow-hidden">
+                            <a href="#">
+                                @if (!string.IsNullOrEmpty(category.ImageUrl))
+                                {
+                                    <img src="@category.ImageUrl" alt="@category.Name" />
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content("~/assets/imgs/shop/cat-@(new Random().Next(1, 16)).png")" alt="@category.Name" />
+                                }
+                            </a>
+                        </figure>
+                        <h6><a href="#">@category.Name</a></h6>
+                        <span>@(new Random().Next(10, 200)) items</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Banners -->
+<section class="banners mb-25">
+    <div class="container">
         <div class="row">
-            <div class="col-12">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="material-icons md-error"></i> @TempData["Error"]
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            @foreach (var banner in Model.Banners)
+            {
+                <div class="col-lg-4 col-md-6 @(banner == Model.Banners.ElementAt(2) ? "d-md-none d-lg-block" : "")">
+                    <div class="banner-img wow animate__animated animate__fadeInUp" data-wow-delay="@(Model.Banners.ToList().IndexOf(banner) * 0.1)s">
+                        @if (!string.IsNullOrEmpty(banner.ImageUrl))
+                        {
+                            <img src="@Url.Content(banner.ImageUrl)" alt="@banner.Title" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/assets/imgs/banner/banner-" + (Model.Banners.ToList().IndexOf(banner) + 1) + ".png")" alt="@banner.Title" />
+                        }
+                        <div class="banner-text">
+                            <h4>
+                                @banner.Title
+                            </h4>
+                            @if (!string.IsNullOrEmpty(banner.ButtonUrl))
+                            {
+                                <a href="@banner.ButtonUrl" class="btn btn-xs">@(banner.ButtonText ?? "Shop Now") <i class="fi-rs-arrow-small-right"></i></a>
+                            }
+                            else
+                            {
+                                <a href="#" class="btn btn-xs">@(banner.ButtonText ?? "Shop Now") <i class="fi-rs-arrow-small-right"></i></a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="product-tabs section-padding position-relative wow fadeIn animated">
+    <div class="bg-square"></div>
+    <div class="container">
+        <div class="tab-header">
+            <h2 class="section-title mb-20">Featured Products</h2>
+            <ul class="nav nav-tabs links" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Hot Deals</button>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content wow fadeIn animated" id="myTabContent">
+            <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+                <div class="row product-grid-4">
+                    @foreach (var product in Model.FeaturedProducts.Take(8))
+                    {
+                        <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                            <div class="product-cart-wrap mb-30 wow animate__animated animate__fadeIn" data-wow-delay=".1s">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="#">
+                                            @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                            {
+                                                <img class="default-img" src="@product.ImageUrl" alt="@product.Name" />
+                                            }
+                                            else
+                                            {
+                                                <img class="default-img" src="@Url.Content("~/assets/imgs/shop/product-1-1.jpg")" alt="@product.Name" />
+                                            }
+                                            @if (!string.IsNullOrEmpty(product.ImageUrl2))
+                                            {
+                                                <img class="hover-img" src="@product.ImageUrl2" alt="@product.Name" />
+                                            }
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <i class="fi-rs-eye"></i>
+                                        </a>
+                                        <a aria-label="Add To Wishlist" class="action-btn" href="#"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="#"><i class="fi-rs-shuffle"></i></a>
+                                    </div>
+                                    @if (product.IsHot)
+                                    {
+                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                            <span class="hot">Hot</span>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="product-content-wrap">
+                                    <div class="product-category">
+                                        <a href="#">@(product.Category?.Name ?? "General")</a>
+                                    </div>
+                                    <h2><a href="#">@product.Name</a></h2>
+                                    <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">(4.0)</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-small text-muted">By <a href="#">@(product.Brand?.Name ?? "NestFood")</a></span>
+                                    </div>
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <span>$@product.Price.ToString("F2")</span>
+                                            @if (product.OldPrice.HasValue && product.OldPrice > product.Price)
+                                            {
+                                                <span class="old-price">$@product.OldPrice.Value.ToString("F2")</span>
+                                            }
+                                        </div>
+                                        <div class="add-cart">
+                                            <a class="add" href="#"><i class="fi-rs-shopping-cart mr-5"></i>Add</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab-two" role="tabpanel" aria-labelledby="tab-two">
+                <div class="row product-grid-4">
+                    @foreach (var product in Model.HotProducts.Take(8))
+                    {
+                        <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                            <div class="product-cart-wrap mb-30 wow animate__animated animate__fadeIn" data-wow-delay=".1s">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="#">
+                                            @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                            {
+                                                <img class="default-img" src="@product.ImageUrl" alt="@product.Name" />
+                                            }
+                                            else
+                                            {
+                                                <img class="default-img" src="@Url.Content("~/assets/imgs/shop/product-1-1.jpg")" alt="@product.Name" />
+                                            }
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <i class="fi-rs-eye"></i>
+                                        </a>
+                                        <a aria-label="Add To Wishlist" class="action-btn" href="#"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="#"><i class="fi-rs-shuffle"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <span class="hot">Hot</span>
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap">
+                                    <div class="product-category">
+                                        <a href="#">@(product.Category?.Name ?? "General")</a>
+                                    </div>
+                                    <h2><a href="#">@product.Name</a></h2>
+                                    <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">(4.0)</span>
+                                    </div>
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <span>$@product.Price.ToString("F2")</span>
+                                            @if (product.OldPrice.HasValue && product.OldPrice > product.Price)
+                                            {
+                                                <span class="old-price">$@product.OldPrice.Value.ToString("F2")</span>
+                                            }
+                                        </div>
+                                        <div class="add-cart">
+                                            <a class="add" href="#"><i class="fi-rs-shopping-cart mr-5"></i>Add</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
-    }
-</div>
-
-<style>
-    .border-left-primary {
-        border-left: 0.25rem solid #4e73df !important;
-    }
-    .border-left-success {
-        border-left: 0.25rem solid #1cc88a !important;
-    }
-    .text-gray-800 {
-        color: #5a5c69 !important;
-    }
-    .btn-block {
-        display: block;
-        width: 100%;
-    }
-</style>
+    </div>
+</section>

@@ -12,11 +12,11 @@
     <meta property="og:image" content="" />
     
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="~/assets/imgs/theme/favicon.svg" />
+    <link rel="shortcut icon" type="image/x-icon" href="@Url.Content("~/assets/imgs/theme/favicon.svg")" />
     
     <!-- Template CSS -->
-    <link rel="stylesheet" href="~/assets/css/plugins/animate.min.css" />
-    <link rel="stylesheet" href="~/assets/css/main.css?v=6.0" />
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/plugins/animate.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/main.css?v=6.0")" />
     
     @await RenderSectionAsync("Styles", required: false)
 </head>
@@ -28,7 +28,7 @@
             <div class="modal-content">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="modal-body">
-                    <div class="deal" style="background-image: url('~/assets/imgs/banner/popup-1.png')">
+                    <div class="deal" style="background-image: url('@Url.Content("~/assets/imgs/banner/popup-1.png")')">
                         <div class="deal-top">
                             <h6 class="mb-10 text-brand-2">Deal of the Day</h6>
                         </div>

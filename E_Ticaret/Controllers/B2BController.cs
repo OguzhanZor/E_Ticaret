@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using E_Ticaret.Repositories;
 using E_Ticaret.Models;
+using E_Ticaret.Models.ViewModels;
 
 namespace E_Ticaret.Controllers
 {
@@ -11,17 +12,20 @@ namespace E_Ticaret.Controllers
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IBannerRepository _bannerRepository;
         private readonly ILogger<B2BController> _logger;
 
         public B2BController(
             IProductRepository productRepository,
             ICategoryRepository categoryRepository,
             IUserRepository userRepository,
+            IBannerRepository bannerRepository,
             ILogger<B2BController> logger)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _userRepository = userRepository;
+            _bannerRepository = bannerRepository;
             _logger = logger;
         }
 
@@ -29,19 +33,49 @@ namespace E_Ticaret.Controllers
         {
             try
             {
-                var b2bViewModel = new B2BViewModel
+                var allBanners = await _bannerRepository.GetAllAsync();
+                
+                // Debug için tüm banner'ları logla
+                _logger.LogInformation($"Toplam banner sayısı: {allBanners.Count()}");
+                foreach (var banner in allBanners)
                 {
-                    Products = await _productRepository.GetAllAsync(),
-                    Categories = await _categoryRepository.GetAllAsync()
+                    _logger.LogInformation($"Tüm Banner: {banner.Title}, IsActive: {banner.IsActive}, StartDate: {banner.StartDate}, EndDate: {banner.EndDate}, DisplayOrder: {banner.DisplayOrder}");
+                }
+
+                // Sadece aktif banner'ları al ve tarih kontrolünü geçici olarak kaldır
+                var activeBanners = allBanners.Where(b => b.IsActive).ToList();
+                _logger.LogInformation($"Aktif banner sayısı: {activeBanners.Count()}");
+
+                // Tarih kontrolünü geçici olarak devre dışı bırak - sadece aktif olanları al
+                var filteredBanners = activeBanners
+                    .OrderBy(b => b.DisplayOrder)
+                    .Take(3)
+                    .ToList();
+                
+                _logger.LogInformation($"Final banner sayısı (tarih kontrolü olmadan): {filteredBanners.Count}");
+
+                var homeViewModel = new HomeViewModel
+                {
+                    Categories = (await _categoryRepository.GetAllAsync()).ToList(),
+                    FeaturedProducts = (await _productRepository.GetAllAsync()).ToList(),
+                    HotProducts = (await _productRepository.GetAllAsync()).ToList(),
+                    Banners = filteredBanners
                 };
 
-                return View(b2bViewModel);
+                // Final debug bilgisi
+                _logger.LogInformation($"Final banner sayısı: {filteredBanners.Count}");
+                foreach (var banner in filteredBanners)
+                {
+                    _logger.LogInformation($"Final Banner: {banner.Title}, IsActive: {banner.IsActive}, StartDate: {banner.StartDate}, EndDate: {banner.EndDate}, DisplayOrder: {banner.DisplayOrder}");
+                }
+
+                return View(homeViewModel);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error loading B2B dashboard");
                 TempData["Error"] = "B2B dashboard yüklenirken hata oluştu.";
-                return View(new B2BViewModel());
+                return View(new HomeViewModel());
             }
         }
 
