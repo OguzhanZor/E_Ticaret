@@ -1,0 +1,220 @@
+@model E_Ticaret.Models.Banner
+@{
+    ViewData["Title"] = "Yeni Banner Ekle";
+    Layout = "~/Views/Admin/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Yeni Banner Ekle</h1>
+    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+        <i class="material-icons md-arrow_back"></i> Geri Dön
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Title" class="form-label">Başlık *</label>
+                                <input asp-for="Title" class="form-control" placeholder="Banner başlığı" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="DisplayOrder" class="form-label">Görüntü Sırası</label>
+                                <input asp-for="DisplayOrder" class="form-control" type="number" min="0" value="0" />
+                                <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Subtitle" class="form-label">Alt Başlık</label>
+                        <textarea asp-for="Subtitle" class="form-control" rows="2" placeholder="Alt başlık (opsiyonel)"></textarea>
+                        <span asp-validation-for="Subtitle" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="ButtonText" class="form-label">Buton Metni</label>
+                                <input asp-for="ButtonText" class="form-control" placeholder="Örn: Alışverişe Başla" />
+                                <span asp-validation-for="ButtonText" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="ButtonUrl" class="form-label">Buton Linki</label>
+                                <input asp-for="ButtonUrl" class="form-control" placeholder="Örn: /urunler" />
+                                <span asp-validation-for="ButtonUrl" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="StartDate" class="form-label">Başlangıç Tarihi *</label>
+                                <input asp-for="StartDate" class="form-control" type="date" />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="EndDate" class="form-label">Bitiş Tarihi</label>
+                                <input asp-for="EndDate" class="form-control" type="date" />
+                                <span asp-validation-for="EndDate" class="text-danger"></span>
+                                <small class="form-text text-muted">Boş bırakılırsa süresiz olur</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                            <label asp-for="IsActive" class="form-check-label">Aktif</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label asp-for="ImageUrl" class="form-label">Banner Görseli *</label>
+                        <div class="image-upload-container">
+                            <div class="image-preview" id="imagePreview">
+                                <i class="material-icons md-image text-muted"></i>
+                                <span>Görsel yükleyin</span>
+                            </div>
+                            <input type="file" id="imageInput" class="form-control" accept="image/*" />
+                            <input asp-for="ImageUrl" type="hidden" id="imageUrlInput" />
+                        </div>
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        <small class="form-text text-muted">Önerilen boyut: 1920x600px</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="MobileImageUrl" class="form-label">Mobil Görsel</label>
+                        <div class="image-upload-container">
+                            <div class="image-preview" id="mobileImagePreview">
+                                <i class="material-icons md-image text-muted"></i>
+                                <span>Mobil görsel yükleyin</span>
+                            </div>
+                            <input type="file" id="mobileImageInput" class="form-control" accept="image/*" />
+                            <input asp-for="MobileImageUrl" type="hidden" id="mobileImageUrlInput" />
+                        </div>
+                        <small class="form-text text-muted">Önerilen boyut: 768x400px</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-end gap-2">
+                <a href="@Url.Action("Index")" class="btn btn-secondary">İptal</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="material-icons md-save"></i> Kaydet
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .image-upload-container {
+            position: relative;
+        }
+        
+        .image-preview {
+            width: 100%;
+            height: 200px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+        
+        .image-preview:hover {
+            border-color: #007bff;
+            background-color: #f0f8ff;
+        }
+        
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        
+        .image-preview.has-image {
+            border-style: solid;
+            border-color: #28a745;
+        }
+        
+        .image-preview i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .image-preview span {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        #imageInput, #mobileImageInput {
+            display: none;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Görsel yükleme işlemleri
+            setupImageUpload('#imagePreview', '#imageInput', '#imageUrlInput');
+            setupImageUpload('#mobileImagePreview', '#mobileImageInput', '#mobileImageUrlInput');
+            
+            function setupImageUpload(previewSelector, inputSelector, urlInputSelector) {
+                var preview = $(previewSelector);
+                var input = $(inputSelector);
+                var urlInput = $(urlInputSelector);
+                
+                preview.on('click', function() {
+                    input.click();
+                });
+                
+                input.on('change', function() {
+                    var file = this.files[0];
+                    if (file) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            preview.html(`<img src="${e.target.result}" alt="Preview" />`);
+                            preview.addClass('has-image');
+                            urlInput.val(e.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+            
+            // Form validation
+            $('form').on('submit', function(e) {
+                var imageUrl = $('#imageUrlInput').val();
+                if (!imageUrl) {
+                    e.preventDefault();
+                    alert('Lütfen bir banner görseli seçin.');
+                    return false;
+                }
+            });
+        });
+    </script>
+}

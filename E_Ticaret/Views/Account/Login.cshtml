@@ -1,0 +1,148 @@
+@{
+    ViewData["Title"] = "Giriş Yap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="material-icons md-login"></i> Giriş Yap
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Login" method="post">
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+                        
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Kullanıcı Adı</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="material-icons md-person"></i>
+                                </span>
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       placeholder="Kullanıcı adınızı girin" required autofocus />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Şifre</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="material-icons md-lock"></i>
+                                </span>
+                                <input type="password" class="form-control" id="password" name="password" 
+                                       placeholder="Şifrenizi girin" required />
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="material-icons md-visibility"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe" />
+                            <label class="form-check-label" for="rememberMe">
+                                Beni hatırla
+                            </label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="material-icons md-login"></i> Giriş Yap
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4" />
+
+                    <div class="text-center">
+                        <p class="text-muted mb-2">Test Kullanıcı Bilgileri:</p>
+                        <div class="alert alert-info">
+                            <strong>Admin:</strong> admin / admin123<br />
+                            <small class="text-muted">Bu bilgileri kullanarak giriş yapabilirsiniz.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Şifre göster/gizle
+            $('#togglePassword').on('click', function() {
+                const password = $('#password');
+                const icon = $(this).find('i');
+                
+                if (password.attr('type') === 'password') {
+                    password.attr('type', 'text');
+                    icon.text('visibility_off');
+                } else {
+                    password.attr('type', 'password');
+                    icon.text('visibility');
+                }
+            });
+
+            // Form validation
+            $('form').on('submit', function() {
+                const username = $('#username').val().trim();
+                const password = $('#password').val().trim();
+                
+                if (!username || !password) {
+                    alert('Lütfen tüm alanları doldurun.');
+                    return false;
+                }
+                
+                return true;
+            });
+        });
+    </script>
+}
+
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+    
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+        border: none;
+    }
+    
+    .btn-primary {
+        border-radius: 10px;
+        padding: 12px;
+    }
+    
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+    
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    .input-group-text {
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+    }
+</style>

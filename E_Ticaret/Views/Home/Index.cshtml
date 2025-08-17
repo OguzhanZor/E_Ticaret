@@ -1,8 +1,277 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using E_Ticaret.Models.ViewModels
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero Slider -->
+<section class="home-slider position-relative mb-30">
+    <div class="container">
+        <div class="home-slide-cover mt-30">
+            <div class="hero-slider-1 style-4 dot-style-1 dot-style-1-position-1">
+                <div class="single-hero-slider single-animation-wrap" style="background-image: url(/assets/imgs/slider/slider-1.png)">
+                    <div class="slider-content">
+                        <h1 class="display-2 mb-40">
+                            Don't miss amazing<br />
+                            grocery deals
+                        </h1>
+                        <p class="mb-65">Sign up for the daily newsletter</p>
+                        <form class="form-subcriber d-flex">
+                            <input type="email" placeholder="Your email address" />
+                            <button class="btn" type="submit">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="single-hero-slider single-animation-wrap" style="background-image: url(/assets/imgs/slider/slider-2.png)">
+                    <div class="slider-content">
+                        <h1 class="display-2 mb-40">
+                            Fresh Vegetables<br />
+                            Big discount
+                        </h1>
+                        <p class="mb-65">Save up to 50% off on your first order</p>
+                        <form class="form-subcriber d-flex">
+                            <input type="email" placeholder="Your email address" />
+                            <button class="btn" type="submit">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-arrow hero-slider-1-arrow"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories -->
+<section class="popular-categories section-padding">
+    <div class="container wow animate__animated animate__fadeIn">
+        <div class="section-title">
+            <div class="title">
+                <h3>Featured Categories</h3>
+                <ul class="list-inline nav nav-tabs links">
+                    @foreach (var category in Model.Categories.Take(4))
+                    {
+                        <li class="list-inline-item nav-item">
+                            <a class="nav-link @(category == Model.Categories.First() ? "active" : "")" href="#">@category.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="slider-arrow slider-arrow-2 flex-right carausel-10-columns-arrow" id="carausel-10-columns-arrows"></div>
+        </div>
+        <div class="carausel-10-columns-cover position-relative">
+            <div class="carausel-10-columns" id="carausel-10-columns">
+                @foreach (var category in Model.Categories.Take(10))
+                {
+                    <div class="card-2 bg-@(new Random().Next(9, 16)) wow animate__animated animate__fadeInUp" data-wow-delay="@(new Random().Next(1, 10) * 0.1)s">
+                        <figure class="img-hover-scale overflow-hidden">
+                            <a href="#">
+                                @if (!string.IsNullOrEmpty(category.ImageUrl))
+                                {
+                                    <img src="@category.ImageUrl" alt="@category.Name" />
+                                }
+                                else
+                                {
+                                    <img src="~/assets/imgs/shop/cat-@(new Random().Next(1, 16)).png" alt="@category.Name" />
+                                }
+                            </a>
+                        </figure>
+                        <h6><a href="#">@category.Name</a></h6>
+                        <span>@(new Random().Next(10, 200)) items</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Banners -->
+<section class="banners mb-25">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="banner-img wow animate__animated animate__fadeInUp" data-wow-delay="0">
+                    <img src="/assets/imgs/banner/banner-1.png" alt="" />
+                    <div class="banner-text">
+                        <h4>
+                            Everyday Fresh & <br />Clean with Our<br />
+                            Products
+                        </h4>
+                        <a href="#" class="btn btn-xs">Shop Now <i class="fi-rs-arrow-small-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="banner-img wow animate__animated animate__fadeInUp" data-wow-delay=".1s">
+                    <img src="/assets/imgs/banner/banner-2.png" alt="" />
+                    <div class="banner-text">
+                        <h4>
+                            Make your Breakfast<br />
+                            Healthy and Easy
+                        </h4>
+                        <a href="#" class="btn btn-xs">Shop Now <i class="fi-rs-arrow-small-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 d-md-none d-lg-block">
+                <div class="banner-img wow animate__animated animate__fadeInUp" data-wow-delay=".2s">
+                    <img src="/assets/imgs/banner/banner-3.png" alt="" />
+                    <div class="banner-text">
+                        <h4>
+                            The best Organic<br />
+                            Products online
+                        </h4>
+                        <a href="#" class="btn btn-xs">Shop Now <i class="fi-rs-arrow-small-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="product-tabs section-padding position-relative wow fadeIn animated">
+    <div class="bg-square"></div>
+    <div class="container">
+        <div class="tab-header">
+            <h2 class="section-title mb-20">Featured Products</h2>
+            <ul class="nav nav-tabs links" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Hot Deals</button>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content wow fadeIn animated" id="myTabContent">
+            <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+                <div class="row product-grid-4">
+                    @foreach (var product in Model.FeaturedProducts.Take(8))
+                    {
+                        <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                            <div class="product-cart-wrap mb-30 wow animate__animated animate__fadeIn" data-wow-delay=".1s">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="#">
+                                            @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                            {
+                                                <img class="default-img" src="@product.ImageUrl" alt="@product.Name" />
+                                            }
+                                            else
+                                            {
+                                                <img class="default-img" src="~/assets/imgs/shop/product-1-1.jpg" alt="@product.Name" />
+                                            }
+                                            @if (!string.IsNullOrEmpty(product.ImageUrl2))
+                                            {
+                                                <img class="hover-img" src="@product.ImageUrl2" alt="@product.Name" />
+                                            }
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <i class="fi-rs-eye"></i>
+                                        </a>
+                                        <a aria-label="Add To Wishlist" class="action-btn" href="#"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="#"><i class="fi-rs-shuffle"></i></a>
+                                    </div>
+                                    @if (product.IsHot)
+                                    {
+                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                            <span class="hot">Hot</span>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="product-content-wrap">
+                                    <div class="product-category">
+                                        <a href="#">@(product.Category?.Name ?? "General")</a>
+                                    </div>
+                                    <h2><a href="#">@product.Name</a></h2>
+                                    <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">(4.0)</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-small text-muted">By <a href="#">@(product.Brand?.Name ?? "NestFood")</a></span>
+                                    </div>
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <span>$@product.Price.ToString("F2")</span>
+                                            @if (product.OldPrice.HasValue && product.OldPrice > product.Price)
+                                            {
+                                                <span class="old-price">$@product.OldPrice.Value.ToString("F2")</span>
+                                            }
+                                        </div>
+                                        <div class="add-cart">
+                                            <a class="add" href="#"><i class="fi-rs-shopping-cart mr-5"></i>Add</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab-two" role="tabpanel" aria-labelledby="tab-two">
+                <div class="row product-grid-4">
+                    @foreach (var product in Model.HotProducts.Take(8))
+                    {
+                        <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                            <div class="product-cart-wrap mb-30 wow animate__animated animate__fadeIn" data-wow-delay=".1s">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+                                        <a href="#">
+                                            @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                            {
+                                                <img class="default-img" src="@product.ImageUrl" alt="@product.Name" />
+                                            }
+                                            else
+                                            {
+                                                <img class="default-img" src="~/assets/imgs/shop/product-1-1.jpg" alt="@product.Name" />
+                                            }
+                                        </a>
+                                    </div>
+                                    <div class="product-action-1">
+                                        <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal">
+                                            <i class="fi-rs-eye"></i>
+                                        </a>
+                                        <a aria-label="Add To Wishlist" class="action-btn" href="#"><i class="fi-rs-heart"></i></a>
+                                        <a aria-label="Compare" class="action-btn" href="#"><i class="fi-rs-shuffle"></i></a>
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <span class="hot">Hot</span>
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap">
+                                    <div class="product-category">
+                                        <a href="#">@(product.Category?.Name ?? "General")</a>
+                                    </div>
+                                    <h2><a href="#">@product.Name</a></h2>
+                                    <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width: 90%"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">(4.0)</span>
+                                    </div>
+                                    <div class="product-card-bottom">
+                                        <div class="product-price">
+                                            <span>$@product.Price.ToString("F2")</span>
+                                            @if (product.OldPrice.HasValue && product.OldPrice > product.Price)
+                                            {
+                                                <span class="old-price">$@product.OldPrice.Value.ToString("F2")</span>
+                                            }
+                                        </div>
+                                        <div class="add-cart">
+                                            <a class="add" href="#"><i class="fi-rs-shopping-cart mr-5"></i>Add</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

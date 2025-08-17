@@ -1,0 +1,84 @@
+@{
+    ViewData["Title"] = "Veritabanı Bağlantı Testi";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Veritabanı Bağlantı Testi</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Bağlantı Durumu:</h5>
+                            @if (ViewBag.ConnectionStatus == "Başarılı")
+                            {
+                                <div class="alert alert-success">
+                                    <i class="fas fa-check-circle"></i> @ViewBag.ConnectionStatus
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-danger">
+                                    <i class="fas fa-times-circle"></i> @ViewBag.ConnectionStatus
+                                </div>
+                            }
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Test Sonucu:</h5>
+                            @if (ViewBag.TestResult != null)
+                            {
+                                <div class="alert alert-info">
+                                    <strong>Query Sonucu:</strong> @ViewBag.TestResult
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <h5>Hata Detayı:</h5>
+                                <div class="alert alert-danger">
+                                    <strong>Hata:</strong> @ViewBag.ErrorMessage
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h5>Bağlantı Bilgileri:</h5>
+                            <div class="alert alert-warning">
+                                <strong>Connection String:</strong><br />
+                                <code>@ViewBag.ConnectionString</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h5>Test Adımları:</h5>
+                            <ol>
+                                <li>SQL Server'ın çalıştığından emin olun</li>
+                                <li>Connection string'deki bilgileri kontrol edin</li>
+                                <li>Firewall ayarlarını kontrol edin</li>
+                                <li>SQL Server Authentication Mode'un "SQL Server and Windows Authentication mode" olduğundan emin olun</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <a href="/" class="btn btn-primary">Ana Sayfaya Dön</a>
+                            <a href="/Test" class="btn btn-secondary">Tekrar Test Et</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

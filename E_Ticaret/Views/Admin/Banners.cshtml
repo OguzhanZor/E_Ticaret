@@ -1,0 +1,242 @@
+@model IEnumerable<E_Ticaret.Models.Banner>
+@{
+    ViewData["Title"] = "Banner Yönetimi";
+    Layout = "~/Views/Admin/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">
+                    <i class="material-icons md-image"></i> Banner Yönetimi
+                </h2>
+                <a href="@Url.Action("CreateBanner", "Admin")" class="btn btn-primary">
+                    <i class="material-icons md-add"></i> Yeni Banner
+                </a>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="material-icons md-check_circle"></i> @TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="material-icons md-error"></i> @TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="material-icons md-list"></i> Banner Listesi
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="bannersTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Başlık</th>
+                                        <th>Alt Başlık</th>
+                                        <th>Görsel</th>
+                                        <th>Sıra</th>
+                                        <th>Durum</th>
+                                        <th>Başlangıç</th>
+                                        <th>Bitiş</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var banner in Model)
+                                    {
+                                        <tr>
+                                            <td>@banner.Id</td>
+                                            <td>@banner.Title</td>
+                                            <td>@banner.Subtitle</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(banner.ImageUrl))
+                                                {
+                                                    <img src="@Url.Content(banner.ImageUrl)" alt="@banner.Title" style="width: 50px; height: 30px; object-fit: cover;" class="img-thumbnail" />
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">@banner.Title</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">@banner.DisplayOrder</span>
+                                                    <div class="btn-group-vertical btn-group-sm">
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="updateDisplayOrder(@banner.Id, @(banner.DisplayOrder - 1))">
+                                                            <i class="material-icons md-keyboard_arrow_up"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="updateDisplayOrder(@banner.Id, @(banner.DisplayOrder + 1))">
+                                                            <i class="material-icons md-keyboard_arrow_down"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @if (banner.IsActive)
+                                                {
+                                                    <span class="badge bg-success">Aktif</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">Pasif</span>
+                                                }
+                                            </td>
+                                            <td>@banner.StartDate.ToString("dd.MM.yyyy")</td>
+                                            <td>@(banner.EndDate?.ToString("dd.MM.yyyy") ?? "")</td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a href="@Url.Action("EditBanner", "Admin", new { id = banner.Id })" 
+                                                       class="btn btn-sm btn-outline-primary" title="Düzenle">
+                                                        <i class="material-icons md-edit"></i>
+                                                    </a>
+                                                    <a href="@Url.Action("DeleteBanner", "Admin", new { id = banner.Id })" 
+                                                       class="btn btn-sm btn-outline-danger" title="Sil">
+                                                        <i class="material-icons md-delete"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="material-icons md-image" style="font-size: 4rem; color: #ccc;"></i>
+                            <h5 class="text-muted mt-3">Henüz banner eklenmemiş</h5>
+                            <p class="text-muted">İlk banner'ı eklemek için "Yeni Banner" butonuna tıklayın.</p>
+                            <a href="@Url.Action("CreateBanner", "Admin")" class="btn btn-primary">
+                                <i class="material-icons md-add"></i> İlk Banner'ı Ekle
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Display Order güncelleme
+            window.updateDisplayOrder = function(bannerId, displayOrder) {
+                $.ajax({
+                    url: '@Url.Action("UpdateBannerDisplayOrder", "Admin")',
+                    type: 'POST',
+                    data: { id: bannerId, displayOrder: displayOrder },
+                    success: function(response) {
+                        if (response.success) {
+                            // Başarılı güncelleme - sayfayı yenile
+                            location.reload();
+                        } else {
+                            // Hata durumunda
+                            alert(response.message || 'Sıra güncellenirken hata oluştu');
+                        }
+                    },
+                    error: function() {
+                        alert('Sıra güncellenirken hata oluştu');
+                    }
+                });
+            };
+
+            // Basit tablo sıralama (DataTables olmadan)
+            $('#bannersTable thead th').click(function() {
+                var table = $(this).parents('table').eq(0);
+                var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+                this.asc = !this.asc;
+                if (!this.asc) {
+                    rows = rows.reverse();
+                }
+                for (var i = 0; i < rows.length; i++) {
+                    table.append(rows[i]);
+                }
+            });
+
+            function comparer(index) {
+                return function(a, b) {
+                    var valA = getCellValue(a, index);
+                    var valB = getCellValue(b, index);
+                    return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
+                };
+            }
+
+            function getCellValue(row, index) {
+                return $(row).children('td').eq(index).text();
+            }
+        });
+    </script>
+}
+
+<style>
+    .btn-group-vertical .btn {
+        margin-bottom: 2px;
+        padding: 2px 4px;
+        font-size: 12px;
+    }
+    
+    .btn-group .btn {
+        margin-right: 2px;
+    }
+    
+    .btn-group .btn:last-child {
+        margin-right: 0;
+    }
+    
+    .table th {
+        vertical-align: middle;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    
+    .table th:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .table td {
+        vertical-align: middle;
+    }
+    
+    .img-thumbnail {
+        border: 1px solid #dee2e6;
+    }
+    
+    .table thead th {
+        background-color: #343a40;
+        color: white;
+        border-color: #454d55;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,0,0,.075);
+    }
+</style>

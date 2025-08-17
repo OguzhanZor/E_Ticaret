@@ -1,0 +1,39 @@
+@{
+    ViewData["Title"] = "Erişim Reddedildi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="material-icons md-block"></i> Erişim Reddedildi
+                    </h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="material-icons md-security text-danger" style="font-size: 4rem;"></i>
+                    </div>
+                    
+                    <h5 class="text-danger mb-3">Bu sayfaya erişim yetkiniz bulunmamaktadır.</h5>
+                    
+                    <p class="text-muted mb-4">
+                        Bu sayfayı görüntülemek için gerekli yetkilere sahip değilsiniz. 
+                        Lütfen sistem yöneticinizle iletişime geçin.
+                    </p>
+                    
+                    <div class="d-grid gap-2 d-md-block">
+                        <a href="/" class="btn btn-primary">
+                            <i class="material-icons md-home"></i> Ana Sayfaya Dön
+                        </a>
+                        <a href="/Account/Login" class="btn btn-outline-secondary">
+                            <i class="material-icons md-login"></i> Giriş Yap
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

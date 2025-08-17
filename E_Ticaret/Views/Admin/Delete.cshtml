@@ -1,0 +1,118 @@
+@model E_Ticaret.Models.Banner
+@{
+    ViewData["Title"] = "Banner Sil";
+    Layout = "~/Views/Admin/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Banner Sil</h1>
+    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+        <i class="material-icons md-arrow_back"></i> Geri Dön
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <i class="material-icons md-warning"></i>
+            <strong>Dikkat!</strong> Bu banner'ı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <dl class="row">
+                    <dt class="col-sm-4">Başlık</dt>
+                    <dd class="col-sm-8">@Model.Title</dd>
+                    
+                    @if (!string.IsNullOrEmpty(Model.Subtitle))
+                    {
+                        <dt class="col-sm-4">Alt Başlık</dt>
+                        <dd class="col-sm-8">@Model.Subtitle</dd>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(Model.ButtonText))
+                    {
+                        <dt class="col-sm-4">Buton Metni</dt>
+                        <dd class="col-sm-8">@Model.ButtonText</dd>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(Model.ButtonUrl))
+                    {
+                        <dt class="col-sm-4">Buton Linki</dt>
+                        <dd class="col-sm-8">@Model.ButtonUrl</dd>
+                    }
+                    
+                    <dt class="col-sm-4">Görüntü Sırası</dt>
+                    <dd class="col-sm-8">@Model.DisplayOrder</dd>
+                    
+                    <dt class="col-sm-4">Durum</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success">Aktif</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Pasif</span>
+                        }
+                    </dd>
+                    
+                    <dt class="col-sm-4">Başlangıç Tarihi</dt>
+                    <dd class="col-sm-8">@Model.StartDate.ToString("dd.MM.yyyy")</dd>
+                    
+                    @if (Model.EndDate.HasValue)
+                    {
+                        <dt class="col-sm-4">Bitiş Tarihi</dt>
+                        <dd class="col-sm-8">@Model.EndDate.Value.ToString("dd.MM.yyyy")</dd>
+                    }
+                    
+                    <dt class="col-sm-4">Oluşturulma Tarihi</dt>
+                    <dd class="col-sm-8">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+                    
+                    @if (Model.UpdatedAt.HasValue)
+                    {
+                        <dt class="col-sm-4">Son Güncelleme</dt>
+                        <dd class="col-sm-8">@Model.UpdatedAt.Value.ToString("dd.MM.yyyy HH:mm")</dd>
+                    }
+                </dl>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label class="form-label">Banner Görseli</label>
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl" alt="@Model.Title" class="img-fluid rounded" />
+                    }
+                    else
+                    {
+                        <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 200px;">
+                            <i class="material-icons md-image text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                    }
+                </div>
+                
+                @if (!string.IsNullOrEmpty(Model.MobileImageUrl))
+                {
+                    <div class="mb-3">
+                        <label class="form-label">Mobil Görsel</label>
+                        <img src="@Model.MobileImageUrl" alt="@Model.Title" class="img-fluid rounded" />
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <form asp-action="Delete" method="post" class="mt-4">
+            <input asp-for="Id" type="hidden" />
+            
+            <div class="d-flex justify-content-end gap-2">
+                <a href="@Url.Action("Index")" class="btn btn-secondary">
+                    <i class="material-icons md-cancel"></i> İptal
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="material-icons md-delete"></i> Evet, Sil
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
