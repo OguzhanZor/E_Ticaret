@@ -6,40 +6,40 @@ namespace E_Ticaret.Models
     {
         public int Id { get; set; }
         
-        [Required]
-        [StringLength(100)]
+        [Required(ErrorMessage = "Ad alanı zorunludur")]
+        [StringLength(100, ErrorMessage = "Ad en fazla {1} karakter olabilir")]
         public string FirstName { get; set; } = string.Empty;
         
-        [Required]
-        [StringLength(100)]
+        [Required(ErrorMessage = "Soyad alanı zorunludur")]
+        [StringLength(100, ErrorMessage = "Soyad en fazla {1} karakter olabilir")]
         public string LastName { get; set; } = string.Empty;
         
-        [Required]
-        [EmailAddress]
-        [StringLength(150)]
+        [Required(ErrorMessage = "E-posta adresi zorunludur")]
+        [EmailAddress(ErrorMessage = "Geçerli bir e-posta adresi giriniz")]
+        [StringLength(150, ErrorMessage = "E-posta adresi en fazla {1} karakter olabilir")]
         public string Email { get; set; } = string.Empty;
         
-        [Required]
-        [StringLength(100)]
+        [Required(ErrorMessage = "Kullanıcı adı zorunludur")]
+        [StringLength(100, ErrorMessage = "Kullanıcı adı en fazla {1} karakter olabilir")]
         public string Username { get; set; } = string.Empty;
         
-        [Required]
-        [StringLength(100)]
+        [Required(ErrorMessage = "Şifre zorunludur")]
+        [StringLength(100, ErrorMessage = "Şifre en fazla {1} karakter olabilir")]
         public string Password { get; set; } = string.Empty;
         
-        [StringLength(20)]
+        [StringLength(20, ErrorMessage = "Telefon numarası en fazla {1} karakter olabilir")]
         public string? Phone { get; set; }
         
-        [StringLength(200)]
+        [StringLength(200, ErrorMessage = "Adres en fazla {1} karakter olabilir")]
         public string? Address { get; set; }
         
-        [StringLength(100)]
+        [StringLength(100, ErrorMessage = "Şehir en fazla {1} karakter olabilir")]
         public string? City { get; set; }
         
-        [StringLength(100)]
+        [StringLength(100, ErrorMessage = "Ülke en fazla {1} karakter olabilir")]
         public string? Country { get; set; }
         
-        [StringLength(20)]
+        [StringLength(20, ErrorMessage = "Posta kodu en fazla {1} karakter olabilir")]
         public string? PostalCode { get; set; }
         
         public bool IsActive { get; set; } = true;

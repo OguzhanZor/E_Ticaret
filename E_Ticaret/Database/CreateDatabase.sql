@@ -29,6 +29,27 @@ BEGIN
 END
 GO
 
+-- Create Sliders Table
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Sliders]') AND type in (N'U'))
+BEGIN
+	CREATE TABLE Sliders (
+		Id INT IDENTITY(1,1) PRIMARY KEY,
+		Title NVARCHAR(200) NOT NULL,
+		Subtitle NVARCHAR(500) NULL,
+		ButtonText NVARCHAR(200) NULL,
+		ButtonUrl NVARCHAR(200) NULL,
+		ImageUrl NVARCHAR(300) NOT NULL,
+		MobileImageUrl NVARCHAR(300) NULL,
+		DisplayOrder INT NOT NULL DEFAULT 0,
+		IsActive BIT NOT NULL DEFAULT 1,
+		StartDate DATETIME2 NOT NULL DEFAULT GETDATE(),
+		EndDate DATETIME2 NULL,
+		CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+		UpdatedAt DATETIME2 NULL
+	);
+END
+GO
+
 -- Create Brands Table
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Brands]') AND type in (N'U'))
 BEGIN
@@ -190,6 +211,11 @@ CREATE INDEX IX_Banners_DisplayOrder ON Banners(DisplayOrder);
 CREATE INDEX IX_Banners_StartDate ON Banners(StartDate);
 CREATE INDEX IX_Banners_EndDate ON Banners(EndDate);
 
+CREATE INDEX IX_Sliders_IsActive ON Sliders(IsActive);
+CREATE INDEX IX_Sliders_DisplayOrder ON Sliders(DisplayOrder);
+CREATE INDEX IX_Sliders_StartDate ON Sliders(StartDate);
+CREATE INDEX IX_Sliders_EndDate ON Sliders(EndDate);
+
 CREATE INDEX IX_Orders_UserId ON Orders(UserId);
 CREATE INDEX IX_Orders_Status ON Orders(Status);
 CREATE INDEX IX_Orders_OrderDate ON Orders(OrderDate);
@@ -216,6 +242,15 @@ BEGIN
     ('Fast food', 'Quick meals and snacks', 8),
     ('Vegetables', 'Fresh vegetables', 9),
     ('Bread and Juice', 'Bread and juice products', 10);
+END
+
+-- Sample Sliders
+IF NOT EXISTS (SELECT * FROM Sliders)
+BEGIN
+	INSERT INTO Sliders (Title, Subtitle, ButtonText, ButtonUrl, ImageUrl, DisplayOrder, IsActive, StartDate)
+	VALUES
+	('Don''t miss amazing grocery deals', 'Sign up for the daily newsletter', 'Subscribe', '#', '~/assets/imgs/slider/slider-1.png', 1, 1, GETDATE()),
+	('Fresh Vegetables Big discount', 'Save up to 50% off on your first order', 'Shop Now', '/products', '~/assets/imgs/slider/slider-2.png', 2, 1, GETDATE());
 END
 
 -- Brands

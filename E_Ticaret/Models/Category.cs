@@ -6,14 +6,14 @@ namespace E_Ticaret.Models
     {
         public int Id { get; set; }
         
-        [Required]
-        [StringLength(100)]
+        [Required(ErrorMessage = "Kategori adı zorunludur")]
+        [StringLength(100, ErrorMessage = "Kategori adı en fazla {1} karakter olabilir")]
         public string Name { get; set; } = string.Empty;
         
-        [StringLength(500)]
+        [StringLength(500, ErrorMessage = "Açıklama en fazla {1} karakter olabilir")]
         public string? Description { get; set; }
         
-        [StringLength(200)]
+        [StringLength(200, ErrorMessage = "Görsel URL'si en fazla {1} karakter olabilir")]
         public string? ImageUrl { get; set; }
         
         public int? ParentCategoryId { get; set; }

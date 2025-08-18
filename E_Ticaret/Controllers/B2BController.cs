@@ -13,6 +13,7 @@ namespace E_Ticaret.Controllers
         private readonly ICategoryRepository _categoryRepository;
         private readonly IUserRepository _userRepository;
         private readonly IBannerRepository _bannerRepository;
+        private readonly ISliderRepository _sliderRepository;
         private readonly ILogger<B2BController> _logger;
 
         public B2BController(
@@ -20,12 +21,14 @@ namespace E_Ticaret.Controllers
             ICategoryRepository categoryRepository,
             IUserRepository userRepository,
             IBannerRepository bannerRepository,
+            ISliderRepository sliderRepository,
             ILogger<B2BController> logger)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _userRepository = userRepository;
             _bannerRepository = bannerRepository;
+            _sliderRepository = sliderRepository;
             _logger = logger;
         }
 
@@ -34,6 +37,7 @@ namespace E_Ticaret.Controllers
             try
             {
                 var allBanners = await _bannerRepository.GetAllAsync();
+                var allSliders = await _sliderRepository.GetActiveAsync();
                 
                 // Debug için tüm banner'ları logla
                 _logger.LogInformation($"Toplam banner sayısı: {allBanners.Count()}");
@@ -59,7 +63,8 @@ namespace E_Ticaret.Controllers
                     Categories = (await _categoryRepository.GetAllAsync()).ToList(),
                     FeaturedProducts = (await _productRepository.GetAllAsync()).ToList(),
                     HotProducts = (await _productRepository.GetAllAsync()).ToList(),
-                    Banners = filteredBanners
+                    Banners = filteredBanners,
+                    Sliders = allSliders.OrderBy(s => s.DisplayOrder).ToList()
                 };
 
                 // Final debug bilgisi

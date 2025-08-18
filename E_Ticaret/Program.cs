@@ -1,5 +1,6 @@
 using E_Ticaret.Data;
 using E_Ticaret.Repositories;
+using E_Ticaret.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,8 +27,22 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();
+builder.Services.AddScoped<ISliderRepository, SliderRepository>();
+
+// Add Services
+builder.Services.AddScoped<IImageService, ImageService>();
+
+// Add Database Initializer
+builder.Services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
 
 var app = builder.Build();
+
+// Initialize database on startup
+using (var scope = app.Services.CreateScope())
+{
+    var databaseInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
+    await databaseInitializer.InitializeAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

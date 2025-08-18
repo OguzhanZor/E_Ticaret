@@ -9,32 +9,29 @@
     <div class="container">
         <div class="home-slide-cover mt-30">
             <div class="hero-slider-1 style-4 dot-style-1 dot-style-1-position-1">
-                <div class="single-hero-slider single-animation-wrap" style="background-image: url(/assets/imgs/slider/slider-1.png)">
-                    <div class="slider-content">
-                        <h1 class="display-2 mb-40">
-                            Don't miss amazing<br />
-                            grocery deals
-                        </h1>
-                        <p class="mb-65">Sign up for the daily newsletter</p>
-                        <form class="form-subcriber d-flex">
-                            <input type="email" placeholder="Your email address" />
-                            <button class="btn" type="submit">Subscribe</button>
-                        </form>
+                @foreach (var slider in Model.Sliders)
+                
+                {
+                    var bgImage = !string.IsNullOrEmpty(slider.ImageUrl) ? Url.Content(slider.ImageUrl) : Url.Content("~/assets/imgs/slider/slider-1.png");
+                    <div class="single-hero-slider single-animation-wrap" style="background-image: url(@bgImage)">
+                        <div class="slider-content">
+                            @if (!string.IsNullOrEmpty(slider.Title))
+                            {
+                                <h1 class="display-2 mb-40">@Html.Raw(slider.Title)</h1>
+                            }
+                            @if (!string.IsNullOrEmpty(slider.Subtitle))
+                            {
+                                <p class="mb-65">@slider.Subtitle</p>
+                            }
+                            @if (!string.IsNullOrEmpty(slider.ButtonText))
+                            {
+                                <div>
+                                    <a class="btn" href="@(string.IsNullOrEmpty(slider.ButtonUrl) ? "#" : slider.ButtonUrl)">@slider.ButtonText</a>
+                                </div>
+                            }
+                        </div>
                     </div>
-                </div>
-                <div class="single-hero-slider single-animation-wrap" style="background-image: url(/assets/imgs/slider/slider-2.png)">
-                    <div class="slider-content">
-                        <h1 class="display-2 mb-40">
-                            Fresh Vegetables<br />
-                            Big discount
-                        </h1>
-                        <p class="mb-65">Save up to 50% off on your first order</p>
-                        <form class="form-subcriber d-flex">
-                            <input type="email" placeholder="Your email address" />
-                            <button class="btn" type="submit">Subscribe</button>
-                        </form>
-                    </div>
-                </div>
+                }
             </div>
             <div class="slider-arrow hero-slider-1-arrow"></div>
         </div>

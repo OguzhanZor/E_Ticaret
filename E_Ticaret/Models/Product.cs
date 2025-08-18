@@ -6,30 +6,30 @@ namespace E_Ticaret.Models
     {
         public int Id { get; set; }
         
-        [Required]
-        [StringLength(200)]
+        [Required(ErrorMessage = "Ürün adı zorunludur")]
+        [StringLength(200, ErrorMessage = "Ürün adı en fazla {1} karakter olabilir")]
         public string Name { get; set; } = string.Empty;
         
-        [StringLength(1000)]
+        [StringLength(1000, ErrorMessage = "Açıklama en fazla {1} karakter olabilir")]
         public string? Description { get; set; }
         
-        [Required]
-        [Range(0, double.MaxValue)]
+        [Required(ErrorMessage = "Fiyat zorunludur")]
+        [Range(0, double.MaxValue, ErrorMessage = "Fiyat 0'dan büyük olmalıdır")]
         public decimal Price { get; set; }
         
-        [Range(0, double.MaxValue)]
+        [Range(0, double.MaxValue, ErrorMessage = "Eski fiyat 0'dan büyük olmalıdır")]
         public decimal? OldPrice { get; set; }
         
-        [Range(0, int.MaxValue)]
+        [Range(0, int.MaxValue, ErrorMessage = "Stok miktarı 0'dan büyük olmalıdır")]
         public int StockQuantity { get; set; }
         
-        [StringLength(200)]
+        [StringLength(200, ErrorMessage = "Görsel URL'si en fazla {1} karakter olabilir")]
         public string? ImageUrl { get; set; }
         
-        [StringLength(200)]
+        [StringLength(200, ErrorMessage = "Görsel 2 URL'si en fazla {1} karakter olabilir")]
         public string? ImageUrl2 { get; set; }
         
-        [StringLength(200)]
+        [StringLength(200, ErrorMessage = "Görsel 3 URL'si en fazla {1} karakter olabilir")]
         public string? ImageUrl3 { get; set; }
         
         public int CategoryId { get; set; }
